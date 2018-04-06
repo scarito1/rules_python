@@ -21,6 +21,7 @@ Status: This is **ALPHA** software.
 ### Packaging rules
 
 * [pip_import](docs/pip.md#pip_import)
+* [pip3_import](docs/python/pip.md#pip3_import)
 
 ## Overview
 
@@ -94,6 +95,9 @@ pip_import(
 load("@my_deps//:requirements.bzl", "pip_install")
 pip_install()
 ```
+
+The `pip_import` rule uses the system `python` command, which is usually
+Python 2. `pip3_import` uses the system `python3` command.
 
 ## Consuming `pip` dependencies
 
