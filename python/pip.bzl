@@ -34,7 +34,7 @@ def _pip_import_impl(repository_ctx, binary_name):
         repository_ctx.path("requirements.bzl"),
         "--directory",
         repository_ctx.path(""),
-    ], quiet=False)
+    ], quiet=False, timeout=3600)
 
     if result.return_code:
         fail("pip_import failed: %s (%s)" % (result.stdout, result.stderr))
