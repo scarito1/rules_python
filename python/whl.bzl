@@ -31,7 +31,7 @@ def _whl_impl(repository_ctx):
             for extra in repository_ctx.attr.extras
         ]
 
-    result = repository_ctx.execute(args)
+    result = repository_ctx.execute(args, timeout=3600)
     if result.return_code:
         fail("whl_library failed: %s (%s)" % (result.stdout, result.stderr))
 
