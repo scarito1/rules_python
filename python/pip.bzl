@@ -22,8 +22,7 @@ def _pip_import_impl(repository_ctx):
     # requirements.bzl without it.
     repository_ctx.file("BUILD", "")
 
-    # To see the output, pass: quiet=False
-    result = repository_ctx.execute([
+    args = [
         repository_ctx.attr.python_interpreter,
         repository_ctx.path(repository_ctx.attr._script),
         "--python_interpreter",
@@ -36,7 +35,15 @@ def _pip_import_impl(repository_ctx):
         repository_ctx.path("requirements.bzl"),
         "--directory",
         repository_ctx.path(""),
-    ])
+    ]
+    if repository_ctx.attr.extra_pip_args:
+        args += [
+            "--extra_pip_args",
+            "\"" + " ".join(repository_ctx.attr.extra_pip_args) + "\"",
+        ]
+
+    # To see the output, pass: quiet=False
+    result = repository_ctx.execute(args)
 
     if result.return_code:
         fail("pip_import failed: %s (%s)" % (result.stdout, result.stderr))
@@ -51,6 +58,9 @@ wheels.
             mandatory = True,
             allow_single_file = True,
             doc = "The label of the requirements.txt file.",
+        ),
+        "extra_pip_args": attr.string_list(
+            doc = "Extra arguments to pass on to pip.",
         ),
         "_script": attr.label(
             executable = True,
